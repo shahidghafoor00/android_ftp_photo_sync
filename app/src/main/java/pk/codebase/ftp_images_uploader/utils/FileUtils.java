@@ -1,0 +1,67 @@
+package pk.codebase.ftp_images_uploader.utils;
+
+
+import android.content.ContentResolver;
+import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.util.Log;
+
+public class FileUtils {
+
+    public static String getPathFromUri(Context context, Uri uri) {
+        String filePath = null;
+        String[] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
+
+        if (cursor != null) {
+            int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            filePath = cursor.getString(columnIndex);
+            cursor.close();
+        } else {
+            // Handle error
+            Log.e("FileUtils", "Cursor is null for URI: " + uri);
+        }
+
+        return filePath;
+    }
+
+    public static String getFileNameFromUri(Context context, Uri uri) {
+        if (context == null || uri == null) {
+            return null;
+        }
+
+        String fileName = null;
+
+        // Check if the URI has a "file" scheme
+        if ("file".equals(uri.getScheme())) {
+            fileName = uri.getLastPathSegment();
+        } else if ("content".equals(uri.getScheme())) {
+            // If the URI has a "content" scheme, query the MediaStore for the file name
+            ContentResolver contentResolver = context.getContentResolver();
+            Cursor cursor = null;
+
+            try {
+                cursor = contentResolver.query(uri, null, null, null, null);
+
+                if (cursor != null && cursor.moveToFirst()) {
+                    int displayNameIndex = cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME);
+
+                    if (displayNameIndex != -1) {
+                        fileName = cursor.getString(displayNameIndex);
+                    }
+                }
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
+            }
+        }
+
+        return fileName;
+    }
+
+
+}
