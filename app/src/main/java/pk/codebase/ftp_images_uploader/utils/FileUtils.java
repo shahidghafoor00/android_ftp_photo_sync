@@ -8,6 +8,8 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import java.io.File;
+
 public class FileUtils {
 
     public static String getPathFromUri(Context context, Uri uri) {
@@ -61,6 +63,11 @@ public class FileUtils {
         }
 
         return fileName;
+    }
+
+    public static String getFileNameFromPath(String filePath) {
+        File file = new File(filePath);
+        return file.getName();
     }
 
 
