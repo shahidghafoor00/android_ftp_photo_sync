@@ -1,9 +1,5 @@
 package pk.codebase.ftp_images_uploader.utils;
 
-
-import android.content.Context;
-import android.content.res.AssetManager;
-
 import org.apache.commons.net.ftp.FTPReply;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
@@ -11,7 +7,6 @@ import org.apache.commons.net.ftp.FTPClient;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 public class FTPHelper {
 
@@ -28,7 +23,7 @@ public class FTPHelper {
             ftpClient.login(FTP_USERNAME, FTP_PASSWORD);
 
             // Use passive mode if needed
-             ftpClient.enterLocalPassiveMode();
+            ftpClient.enterLocalPassiveMode();
 
             // Set file type to binary
             ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
